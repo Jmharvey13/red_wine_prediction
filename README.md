@@ -1,35 +1,39 @@
 
-# Airbnb Rental Price Prediction API
+# Red Wine Quality Prediction API
 
-This is a Flask-based API that predicts Airbnb rental prices based on several factors like bedrooms, bathrooms, accommodation capacity, and neighborhood. The API has two main endpoints:
+This is a Flask-based API that predicts red wine quality ratings based on several factors like pH, density, . The API has two main endpoints:
 - `/reload`: Reloads the data and trains the model.
-- `/predict`: Predicts the rental price for a given listing.
+- `/predict`: Predicts the quality rating for a given wine.
 
 ## Data Source and Prediction Process
 
 ### Data Source
 
-The data used for this project comes from the [Inside Airbnb dataset](https://insideairbnb.com/get-the-data/), which provides detailed information about Airbnb listings in various cities. For this particular app, the data for Boston, MA is used.
+The data come from Cortez, Cerdeira, Almeida, Matos and Reis' 2009 study, "Modeling wine preferences by data mining from physicochemical properties"
+via the University of California Irvine Machine Learning Repository.  It provides information about the chemical compositions and quality ratings of 
+red Vihno Verde wines.
 
-The dataset includes important features such as:
-- **Price**: The rental price of the listing.
-- **Bedrooms**: The number of bedrooms in the listing.
-- **Bathrooms**: The number of bathrooms in the listing.
-- **Accommodates**: The maximum number of guests the listing can accommodate.
-- **Neighbourhood**: The neighborhood where the listing is located.
+The dataset includes features such as:
+- **Rating**: The median score of 3 wine assessors on a scale from 1-10.  
+- **Density**: The density of the wine (mass/volume)
+- **Acidity(pH)**: The pH scale acidity of the wine
+- **Sulfates**: The prevalence of sulphates
+- **Alcohol**: The amount of alcohol by volume (abv)
+- **Total Sulfur**: The overall prevalence of sulfur
+- **Etc.**
 
-The full dataset can be accessed and downloaded from the Inside Airbnb website at [Inside Airbnb - Get the Data](https://insideairbnb.com/get-the-data/).
+The full dataset can be accessed and downloaded from the UCI Machine Learning Repository at https://archive.ics.uci.edu/static/public/186/wine+quality.zip.
 
 ### Prediction Process
 
-The application makes use of a simple **Linear Regression Model** to predict the rental price of an Airbnb listing based on various input features such as the number of bedrooms, bathrooms, accommodation capacity, and the neighborhood.
+The application makes use of a simple **Linear Regression Model** to predict the quality rating of a red Vihno Verde wime based on various input features such as the acidity, abv, density, etc.
 
 The process of prediction is as follows:
-1. **Data Preprocessing**: The data is cleaned and processed. Non-numeric values are removed or converted, and categorical variables like `neighbourhood` are one-hot encoded to make them suitable for machine learning models.
-2. **Model Training**: A linear regression model is trained on the cleaned dataset using features like bedrooms, bathrooms, accommodates, and one-hot encoded neighborhood values.
-3. **Prediction**: Once trained, the model can predict the rental price based on user input, such as the number of bedrooms, bathrooms, and neighborhood.
+1. **Data Preprocessing**: The data is loaded and processed into compatible float and integer data types.  
+2. **Model Training**: A linear regression model is trained on the dataset using features like acidity, abv and density.
+3. **Prediction**: Once trained, the model can predict the rating based on user input, such as the abv, acidity, density, etc.
 
-By using this model, the app can provide quick rental price predictions for Airbnb listings in Boston based on historical data.
+By using this model, the app can provide quick predictions about wine quality that may help wine producers make more informated decisions about how to craft wine according to chemical attributes.
 
 
 ## Prerequisites
@@ -45,8 +49,8 @@ Before you can set up and run this app, ensure you have the following software i
 ### 1. Clone the Repository
 First, clone this repository to your local machine:
 ```bash
-git clone https://github.com/tjhoranumass/airbnb.git
-cd airbnb
+git clone https://github.com/Jmharvey13/red_wine_prediction
+cd red_wine
 ```
 
 ### 2. Create a Virtual Environment (Optional but Recommended)
@@ -141,16 +145,23 @@ curl -X POST http://127.0.0.1:5000/reload
 
 #### Predict Price
 
-To predict a rental price, you can use the `/predict` endpoint. Here's an example request:
+To predict a quality rating, you can use the `/predict` endpoint. Here's an example request:
 
 ```bash
 curl -X POST http://127.0.0.1:5000/predict \
   -H 'Content-Type: application/json' \
   -d '{
-    "bedrooms": 2,
-    "bathrooms": 1.5,
-    "accommodates": 4,
-    "neighbourhood_cleansed": "South Boston"
+  "alcohol": 9,
+  "chlorides": 0.07,
+  "citric_acid": 0.04,
+  "density": 0.99,
+  "fixed_acidity": 7.8,
+  "free_sulfur_dioxide": 11,
+  "ph": 3.2,
+  "residual_sugar": 3.2,
+  "sulphates": 0,
+  "total_sulfur_dioxide": 67,
+  "volatile_acidity": 0.7
 }'
 ```
 
@@ -292,3 +303,9 @@ heroku open
 
 Your app should now be live on Heroku!
 # red_wine_prediction
+
+### Citations
+
+Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009). 
+Modeling wine preferences by data mining from physicochemical properties. 
+Decision Support Systems, 47(4). https://doi.org/10.1016/j.dss.2009.05.016
